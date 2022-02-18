@@ -8,9 +8,16 @@
         <div class="absolute inset-0 bg-gray-800 mix-blend-multiply" aria-hidden="true" />
       </div>
       <div class="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8">
+        <div class="flex">
+        <div class="flex-auto w-28">
+        <img src="/img/logo.png" alt="">
+        </div>
+        <div class="flex-auto self-center">
         <h1 class="text-4xl font-extrabold tracking-tight text-white md:text-5xl lg:text-6xl">NEW LIFE</h1>
         <h1 class="text-2xl font-extrabold tracking-tight text-white md:text-3xl lg:text-4xl">ANUGERAH KEBENARAN</h1>
         <p class="mt-6 max-w-3xl text-xl text-gray-300">A community driven church, addressing the kingdom of God in homes</p>
+        </div>
+        </div>
       </div>
     </div>
 
