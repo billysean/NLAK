@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { NewspaperIcon, PhoneIcon, SupportIcon } from '@heroicons/vue/outline'
+import { LocationMarkerIcon, PhoneIcon, SupportIcon } from '@heroicons/vue/outline'
 
 const supportLinks = [
   {
@@ -65,7 +65,7 @@ const supportLinks = [
     href: '#',
     description:
       'We are rapidly expanding our community. So keep up to date and find the nearest NLAK to you.',
-    icon: NewspaperIcon,
+    icon: LocationMarkerIcon,
   },
 ]
 
