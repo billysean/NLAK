@@ -67,7 +67,7 @@
                   <div class="flex-shrink-0">
                     <img
                       class="h-6 w-6 rounded-full"
-                      src="/img/nlak logo kecil.png"
+                      src="/img/nlak-kecil.png"
                       alt=""
                     />
                   </div>
