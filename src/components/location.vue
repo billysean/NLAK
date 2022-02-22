@@ -26,11 +26,30 @@ const products = [
   {
     id: 1,
     name: 'Serpong, Tangerang Selatan',
-    color: 'White and black',
     href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-03-related-product-01.jpg',
+    imageSrc: '/img/tempat1.jpg',
     imageAlt: 'Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls.',
-    price: '',
+  },
+  {
+    id: 1,
+    name: 'Serpong, Tangerang Selatan',
+    href: '#',
+    imageSrc: '/img/tempat2.jpg',
+    imageAlt: 'Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls.',
+  },
+  {
+    id: 1,
+    name: 'Serpong, Tangerang Selatan',
+    href: '#',
+    imageSrc: '/img/tempat3.jpg',
+    imageAlt: 'Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls.',
+  },
+  {
+    id: 1,
+    name: 'Serpong, Tangerang Selatan',
+    href: '#',
+    imageSrc: '/img/tempat4.jpg',
+    imageAlt: 'Front of zip tote bag with white canvas, black canvas straps and handle, and black zipper pulls.',
   },
   // More products...
 ]
