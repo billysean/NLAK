@@ -17,8 +17,8 @@
         <PopoverGroup as="nav" class="flex space-x-10">
           
           <a href="/selgroup" class="text-base font-medium text-gray-500 hover:text-gray-900"> Sel Group </a>
-          <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900"> Find Us </a>
-          <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900"> Media </a>
+          <a href="/findus" class="text-base font-medium text-gray-500 hover:text-gray-900"> Find Us </a>
+          <a href="/media" class="text-base font-medium text-gray-500 hover:text-gray-900"> Media </a>
 
           
         </PopoverGroup>
@@ -50,8 +50,8 @@
               <nav class="grid gap-6">
                 <a href="/selgroup" class="text-base font-medium text-gray-900 hover:text-gray-700"> Sel Group </a>
 
-              <a href="#" class="text-base font-medium text-gray-900 hover:text-gray-700"> Find Us </a>
-              <a href="#" class="text-base font-medium text-gray-900 hover:text-gray-700"> Media </a>
+              <a href="/findus" class="text-base font-medium text-gray-900 hover:text-gray-700"> Find Us </a>
+              <a href="/media" class="text-base font-medium text-gray-900 hover:text-gray-700"> Media </a>
               </nav>
             </div>
           </div>
