@@ -3,12 +3,12 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA7TFT969ErEBr6lCNGijDHSpNxInKKVb4",
-  authDomain: "invoice-app-4b837.firebaseapp.com",
-  projectId: "invoice-app-4b837",
-  storageBucket: "invoice-app-4b837.appspot.com",
-  messagingSenderId: "551341183596",
-  appId: "1:551341183596:web:9ba50c7b1f63d9bc17fe49"
+  apiKey: "AIzaSyAr1OmGSUN1m89SHKyBFjFAlLw8dYBeO7E",
+  authDomain: "nlak-church.firebaseapp.com",
+  projectId: "nlak-church",
+  storageBucket: "nlak-church.appspot.com",
+  messagingSenderId: "1037848602634",
+  appId: "1:1037848602634:web:5d9196a67ab5c4a33a57f3"
 };
 
 const firebaseApp = initializeApp(firebaseConfig)

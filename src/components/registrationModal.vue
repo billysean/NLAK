@@ -12,34 +12,35 @@
       <div class="bill-from flex flex-column">
         <!-- <h4>Participants</h4> -->
         <div class="input flex flex-column">
-          <label for="participantName"> Name </label>
+          <label for="name"> Name </label>
           <input
             type="text"
-            id="participantName"
-            v-model="participantName"
-            required
-          />
-        </div>
-        <div class="input flex flex-column">
-          <label for="participantEmail"> Email </label>
-          <input
-            type="email"
-            id="participantEmail"
-            v-model="participantEmail"
+            id="name"
+            v-model="name"
             required
           />
         </div>
         <div class="location-details flex">
           <div class="input flex flex-column">
-            <label for="billerCity"> Gender </label>
-            <select type="text" id="billerCity" v-model="billerCity" required>
+            <label for="email"> Email </label>
+            <input type="email" id="email" v-model="email" required />
+          </div>
+          <div class="input flex flex-column">
+            <label for="Phone"> Phone </label>
+            <input type="text" id="Phone" v-model="phone" required />
+          </div>
+        </div>
+        <div class="location-details flex">
+          <div class="input flex flex-column">
+            <label for="gender"> Gender </label>
+            <select type="text" id="gender" v-model="gender" required>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
             </select>
           </div>
           <div class="input flex flex-column">
             <label for="Age"> Age </label>
-            <input type="text" id="Age" v-model="Age" required />
+            <input type="text" id="Age" v-model="age" required />
           </div>
         </div>
       </div>
@@ -51,8 +52,8 @@
             <label for="serviceDate"> Service Location </label>
             <select
               type="text"
-              id="serviceLocation"
-              v-model="serviceLocation"
+              id="serviceLoc"
+              v-model="serviceLoc"
               required
             >
               <option value="GSP">Serpong</option>
@@ -80,27 +81,29 @@
 
             <tr
               class="table-items flex"
-              v-for="(item, index) in participantList"
+              v-for="(participant, index) in participantList"
               :key="index"
             >
               <td class="friend-name">
-                <input type="text" v-model="item.itemName" />
+                <input type="text" v-model="participant.name" />
               </td>
               <td class="gender">
-                <select type="text" v-model="item.gender" required>
+                <select type="text" v-model="participant.gender" required>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                 </select>
               </td>
-              <td class="age"><input type="text" v-model="item.age" /></td>
+              <td class="age">
+                <input type="number" v-model="participant.age" />
+              </td>
               <img
-                @click="deleteInvoiceItem(item.id)"
+                @click="deleteFriend(participant.id)"
                 src="/img/icon-delete.svg"
                 alt=""
               />
             </tr>
           </table>
-          <div @click="addNewInvoiceItem" class="flex button">
+          <div @click="addNewFriend" class="flex button">
             <img src="/img/icon-plus.svg" alt="" />
             Add More Friend
           </div>
@@ -114,7 +117,7 @@
         <div class="left">
           <button
             type="button"
-            @click="closeInvoice"
+            @click="closeRegister"
             class="
               relative
               items-center
@@ -136,9 +139,8 @@
         </div>
         <div class="right">
           <button
-            v-if="!editInvoice"
             type="submit"
-            @click="saveDraft"
+            @click="draft"
             class="
               relative
               items-center
@@ -159,7 +161,7 @@
           </button>
           <button
             type="submit"
-            @click="publishInvoice"
+            @click="valid"
             class="
               relative
               items-center
@@ -188,18 +190,23 @@
 import { db } from "../firebase/firebaseInit";
 
 import LoadingVue from "./loading.vue";
-import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
-import { mapActions, mapMutations, mapState } from "vuex";
+import { collection, addDoc } from "firebase/firestore";
+import { mapMutations } from "vuex";
 import { uid } from "uid";
 export default {
-  name: "invoiceModal",
+  name: "registrationModal",
   data() {
     return {
+      bookingStatus: null,
+      email: null,
+      phone: null,
       loading: null,
       docId: null,
+      serviceLoc:null,
       dateOptions: { year: "numeric", month: "short", day: "numeric" },
-      participantName: null,
-      Age: null,
+      name: null,
+      age: null,
+      gender: null,
       serviceDateUnix: null,
       serviceDate: null,
       participantList: [],
@@ -219,80 +226,49 @@ export default {
   methods: {
     ...mapMutations(["TOGGLE_REGISTER"]),
 
-    checkClick(e) {
-      if (e.target === this.$refs.invoiceWrap) {
-        this.TOGGLE_MODAL();
-      }
-    },
-
-    closeInvoice() {
+    closeRegister() {
       this.TOGGLE_REGISTER();
     },
 
-    addNewInvoiceItem() {
+    addNewFriend() {
       this.participantList.push({
         id: uid(),
-        itemName: "",
+        name: "",
         gender: "",
-        age: 0,
-        total: 0,
+        age: null,
       });
     },
 
-    deleteInvoiceItem(id) {
+    deleteFriend(id) {
       this.participantList = this.participantList.filter(
         (item) => item.id !== id
       );
     },
 
-    callInvoiceTotal() {
-      this.invoiceTotal = 0;
-      this.participantList.forEach((item) => {
-        this.invoiceTotal += item.total;
-      });
+    valid() {
+      this.bookingStatus = "valid";
     },
 
-    publishInvoice() {
-      this.invoicePending = true;
+    draft() {
+      this.bookingStatus = "draft";
     },
 
-    saveDraft() {
-      this.invoiceDraft = true;
-    },
-
-    async uploadInvoice() {
-      if (this.participantList.lengt <= 0) {
-        alert("item list is empty.");
-        return;
-      }
-
+    async addToDatabase() {
       this.loading = true;
-      this.callInvoiceTotal();
 
       try {
-        const docRef = await addDoc(collection(db, "invoices"), {
-          invoiceId: uid(6),
-          participantName: this.participantName,
-          billerCity: this.billerCity,
-          Age: this.Age,
-          billerCountry: this.billerCountry,
-          clientName: this.clientName,
-          clientEmail: this.clientEmail,
-          clientStreetAddress: this.clientStreetAddress,
-          clientCity: this.clientCity,
-          clientZipCode: this.clientZipCode,
-          clientCountry: this.clientCountry,
+        const docRef = await addDoc(collection(db, "sundayService"), {
+          bookingId: uid(6),
+          name: this.name,
+          email: this.email,
+          phone: this.phone,
+          gender: this.gender,
+          serviceLoc: this.serviceLoc,
+          Age: this.age,
           serviceDateUnix: this.serviceDateUnix,
           serviceDate: this.serviceDate,
-          paymentTerms: this.paymentTerms,
-          paymentDueDateUnix: this.paymentDueDateUnix,
-          paymentDueDate: this.paymentDueDate,
-          productDescription: this.productDescription,
-          invoicePending: this.invoicePending,
-          invoiceDraft: this.invoiceDraft,
           participantList: this.participantList,
-          invoiceTotal: this.invoiceTotal,
-          invoicePaid: null,
+          bookingStatus: this.bookingStatus
         });
         console.log(docRef);
       } catch (e) {
@@ -300,89 +276,16 @@ export default {
       }
 
       this.loading = false;
-      //   const database = db.collection("invoices").doc('invoice');
-      //   await database.set({
 
-      //   });
-
-      this.TOGGLE_INVOICE();
-      this.GET_INVOICES();
-    },
-
-    async updateInvoice() {
-      if (this.participantList.lengt <= 0) {
-        alert("item list is empty.");
-        return;
-      }
-
-      this.loading = true;
-      this.callInvoiceTotal();
-
-      try {
-        const docRef = await updateDoc(
-          doc(collection(db, "invoices"), this.docId),
-          {
-            participantName: this.participantName,
-            billerCity: this.billerCity,
-            Age: this.Age,
-            billerCountry: this.billerCountry,
-            clientName: this.clientName,
-            clientEmail: this.clientEmail,
-            clientStreetAddress: this.clientStreetAddress,
-            clientCity: this.clientCity,
-            clientZipCode: this.clientZipCode,
-            clientCountry: this.clientCountry,
-            serviceDateUnix: this.serviceDateUnix,
-            serviceDate: this.serviceDate,
-            paymentTerms: this.paymentTerms,
-            paymentDueDateUnix: this.paymentDueDateUnix,
-            paymentDueDate: this.paymentDueDate,
-            productDescription: this.productDescription,
-            participantList: this.participantList,
-            invoiceTotal: this.invoiceTotal,
-          }
-        );
-        console.log(docRef);
-      } catch (e) {
-        console.log(e);
-      }
-
-      this.loading = false;
-      //   const database = db.collection("invoices").doc('invoice');
-      //   await database.set({
-
-      //   });
-
-      const data = {
-        docId: this.docId,
-        routeId: this.$route.params.invoiceId,
-      };
-
-      this.UPDATE_INVOICE(data);
+      this.TOGGLE_REGISTER();
     },
 
     submitForm() {
-      if (this.editInvoice) {
-        this.updateInvoice();
-        return;
-      }
-      this.uploadInvoice();
+      this.addToDatabase();
     },
   },
-  computed: {
-    ...mapState(["editInvoice", "currentInvoiceArray"]),
-  },
-  watch: {
-    paymentTerms() {
-      const futureDate = new Date();
-      this.paymentDueDateUnix = futureDate.setDate(
-        futureDate.getDate() + parseInt(this.paymentTerms)
-      );
-      this.paymentDueDate = new Date(
-        this.paymentDueDateUnix
-      ).toLocaleDateString("en-us", this.dateOptions);
-    },
-  },
+  computed: {},
+  watch: {},
 };
 </script>
 
@@ -517,7 +420,9 @@ export default {
         background-color: #e4e4e4;
         align-items: center;
         justify-content: center;
+        border-radius: 30px;
         width: 100%;
+        padding: 10px;
         cursor: pointer;
 
         img {
