@@ -18,7 +18,7 @@
           
           <router-link to="/selgroup" class="text-base font-medium text-gray-500 hover:text-gray-900"> Sel Group </router-link>
           <router-link to="/findus" class="text-base font-medium text-gray-500 hover:text-gray-900"> Find Us </router-link>
-          <router-link to="/media" class="text-base font-medium text-gray-500 hover:text-gray-900"> Media </router-link>
+          <!-- <router-link to="/media" class="text-base font-medium text-gray-500 hover:text-gray-900"> Media </router-link> -->
 
           
         </PopoverGroup>
@@ -51,7 +51,7 @@
                 <router-link to="/selgroup" class="text-base font-medium text-gray-900 hover:text-gray-700"> Sel Group </router-link>
 
               <router-link to="/findus" class="text-base font-medium text-gray-900 hover:text-gray-700"> Find Us </router-link>
-              <router-link to="/media" class="text-base font-medium text-gray-900 hover:text-gray-700"> Media </router-link>
+              <!-- <router-link to="/media" class="text-base font-medium text-gray-900 hover:text-gray-700"> Media </router-link> -->
               </nav>
             </div>
           </div>
